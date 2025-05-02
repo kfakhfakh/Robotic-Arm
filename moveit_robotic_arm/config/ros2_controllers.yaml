@@ -1,0 +1,33 @@
+# This config file is used by ros2_control
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    arm_group_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+arm_group_controller:
+  ros__parameters:
+    joints:
+      - base_waist_joint
+      - waist_arm_joint
+      - arm_end_joint
+      - end_support_joint
+      - support_cam_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    constraints:
+    goal_time: 0.5
+    gains:  
+      base_waist_joint: {p: 100.0, i: 0.01, d: 10.0}
+      waist_arm_joint: {p: 100.0, i: 0.01, d: 10.0}
+      arm_end_joint: {p: 100.0, i: 0.01, d: 10.0}
+      end_support_joint: {p: 100.0, i: 0.01, d: 10.0}
+      support_cam_joint: {p: 100.0, i: 0.01, d: 10.0}

@@ -57,6 +57,7 @@ def generate_launch_description():
             package="joint_state_publisher_gui",
             executable="joint_state_publisher_gui"
         ),
+    
 
         # Launch RViz2 with predefined config
         Node(
