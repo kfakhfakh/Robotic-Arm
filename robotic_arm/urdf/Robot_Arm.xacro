@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="robotic_arm" xmlns:xacro="http:///www.ros.org/wiki/xacro">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-7.5348E-09 -0.00013761 0.017995"
+        rpy="0 0 0" />
+      <mass
+        value="0.10728" />
+      <inertia
+        ixx="0.00014427"
+        ixy="6.2688E-11"
+        ixz="-2.1919E-11"
+        iyy="0.00014507"
+        iyz="-5.8994E-08"
+        izz="0.00022021" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+      
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="waist_Link">
+    <inertial>
+      <origin
+        xyz="0.0074946 0.019383 -0.0014293"
+        rpy="0 0 0" />
+      <mass
+        value="0.073648" />
+      <inertia
+        ixx="6.7954E-05"
+        ixy="-6.43E-06"
+        ixz="2.5439E-07"
+        iyy="6.0133E-05"
+        iyz="6.7307E-06"
+        izz="5.0282E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/waist_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/waist_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_waist_joint"
+    type="revolute">
+    <dynamics damping="1.0" friction="1.0"/>
+    <origin
+      xyz="0 0 0.0575"
+      rpy="1.5708 0 1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="waist_Link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.571"
+      upper="1.571"
+      effort="10"
+      velocity="3" />
+  </joint>
+  <link
+    name="arm_Link">
+    <inertial>
+      <origin
+        xyz="1.0586E-07 0.06 -0.0049709"
+        rpy="0 0 0" />
+      <mass
+        value="0.064059" />
+      <inertia
+        ixx="0.00010375"
+        ixy="3.5389E-10"
+        ixz="1.0836E-10"
+        iyy="9.2286E-06"
+        iyz="-4.5873E-12"
+        izz="0.00010863" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/arm_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/arm_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="waist_arm_joint"
+    type="revolute">
+    <dynamics damping="1.0" friction="1.0"/>
+    <origin
+      xyz="0 0.04028 -0.01391"
+      rpy="0 1.5708 0" />
+    <parent
+      link="waist_Link" />
+    <child
+      link="arm_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.571"
+      upper="1.571"
+      effort="10"
+      velocity="3" />
+  </joint>
+  <link
+    name="end_Link">
+    <inertial>
+      <origin
+        xyz="0.041711 3.1659E-05 -0.00972"
+        rpy="0 0 0" />
+      <mass
+        value="0.047098" />
+      <inertia
+        ixx="8.7227E-06"
+        ixy="-6.9702E-08"
+        ixz="-4.0365E-07"
+        iyy="5.1401E-05"
+        iyz="-1.8365E-10"
+        izz="5.4665E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/end_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/end_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="arm_end_joint"
+    type="revolute">
+    <dynamics damping="1.0" friction="1.0"/>
+    <origin
+      xyz="0 0.12 0"
+      rpy="3.1416 0 1.5708" />
+    <parent
+      link="arm_Link" />
+    <child
+      link="end_Link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.571"
+      upper="1.571"
+      effort="10"
+      velocity="3" />
+  </joint>
+  <link
+    name="support_Link">
+    <inertial>
+      <origin
+        xyz="0.0096128 0.01329 0.0015"
+        rpy="0 0 0" />
+      <mass
+        value="0.032654" />
+      <inertia
+        ixx="8.6378E-06"
+        ixy="-1.6109E-07"
+        ixz="3.8781E-22"
+        iyy="1.0677E-05"
+        iyz="-1.0792E-21"
+        izz="1.2956E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/support_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/support_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="end_support_joint"
+    type="fixed">
+    <dynamics damping="1.0" friction="1.0"/>
+    <origin
+      xyz="0.065057 -0.0082418 -0.011"
+      rpy="0 0 0" />
+    <parent
+      link="end_Link" />
+    <child
+      link="support_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+
+  <link
+    name="cam_Link">
+    <inertial>
+      <origin
+        xyz="0.0215 0.0215 0.0215"
+        rpy="0 0 0" />
+      <mass
+        value="0.079507" />
+      <inertia
+        ixx="2.4501E-05"
+        ixy="-1.8211E-21"
+        ixz="-5.7909E-22"
+        iyy="2.4501E-05"
+        iyz="-2.7946E-23"
+        izz="2.4501E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/cam_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/cam_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="support_cam_joint"
+    type="fixed">
+    <dynamics damping="1.0" friction="1.0"/>
+    <origin
+      xyz="-0.0028878 0.074628 0.023"
+      rpy="-1.5708 0 -1.5708" />
+    <parent
+      link="support_Link" />
+    <child
+      link="cam_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- Robot Tip -->
+  <link name="tip_link"/>
+  <joint name="support_tip_joint" type="fixed">
+    <parent link="support_Link"/>
+    <child link="tip_link"/>
+    <origin xyz="0.025 0.004 0.001" rpy="0 0 0"/> 
+  </joint>
+
+  <xacro:macro name="control" params="joint">
+    <transmission name="${joint}_transmission">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint}">
+        <hardwareInterface>position</hardwareInterface>
+      </joint>
+      <actuator name="${joint}_motor">
+        <hardwareInterface>position</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+<!-- Usage -->
+  <xacro:control joint="base_waist_joint"/>
+  <xacro:control joint="waist_arm_joint"/>
+  <xacro:control joint="arm_end_joint"/>
+  <xacro:control joint="end_support_joint"/>
+  <xacro:control joint="support_cam_joint"/>
+
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <robotNamespace>/robotic_arm</robotNamespace>
+      <parameters>$(find moveit_robotic_arm)/config/ros2_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <ros2_control name="controller_manager" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+
+    <joint>
+      <name>base_waist_joint</name>
+      <command_interface>position</command_interface>
+      <state_interface>position</state_interface>
+      <state_interface>velocity</state_interface>
+    </joint>
+    <joint>
+      <name>waist_arm_joint</name>
+      <command_interface>position</command_interface>
+      <state_interface>position</state_interface>
+      <state_interface>velocity</state_interface>
+    </joint>
+    <joint>
+      <name>arm_end_joint</name>
+      <command_interface>position</command_interface>
+      <state_interface>position</state_interface>
+      <state_interface>velocity</state_interface>
+    </joint>
+    <joint>
+      <name>end_support_joint</name>
+      <command_interface>position</command_interface>
+      <state_interface>position</state_interface>
+      <state_interface>velocity</state_interface>
+    </joint>
+    <joint>
+      <name>support_cam_joint</name>
+      <command_interface>position</command_interface>
+      <state_interface>position</state_interface>
+      <state_interface>velocity</state_interface>
+    </joint>  
+  </ros2_control>
+</robot>
