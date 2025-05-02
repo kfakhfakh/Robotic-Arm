@@ -84,7 +84,6 @@
   <joint
     name="base_waist_joint"
     type="revolute">
-    <dynamics damping="1.0" friction="1.0"/>
     <origin
       xyz="0 0 0.0575"
       rpy="1.5708 0 1.5708" />
@@ -143,7 +142,6 @@
   <joint
     name="waist_arm_joint"
     type="revolute">
-    <dynamics damping="1.0" friction="1.0"/>
     <origin
       xyz="0 0.04028 -0.01391"
       rpy="0 1.5708 0" />
@@ -202,7 +200,6 @@
   <joint
     name="arm_end_joint"
     type="revolute">
-    <dynamics damping="1.0" friction="1.0"/>
     <origin
       xyz="0 0.12 0"
       rpy="3.1416 0 1.5708" />
@@ -261,7 +258,6 @@
   <joint
     name="end_support_joint"
     type="fixed">
-    <dynamics damping="1.0" friction="1.0"/>
     <origin
       xyz="0.065057 -0.0082418 -0.011"
       rpy="0 0 0" />
@@ -272,132 +268,4 @@
     <axis
       xyz="0 0 0" />
   </joint>
-
-
-  <link
-    name="cam_Link">
-    <inertial>
-      <origin
-        xyz="0.0215 0.0215 0.0215"
-        rpy="0 0 0" />
-      <mass
-        value="0.079507" />
-      <inertia
-        ixx="2.4501E-05"
-        ixy="-1.8211E-21"
-        ixz="-5.7909E-22"
-        iyy="2.4501E-05"
-        iyz="-2.7946E-23"
-        izz="2.4501E-05" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/cam_Link.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.79216 0.81961 0.93333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/cam_Link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="support_cam_joint"
-    type="fixed">
-    <dynamics damping="1.0" friction="1.0"/>
-    <origin
-      xyz="-0.0028878 0.074628 0.023"
-      rpy="-1.5708 0 -1.5708" />
-    <parent
-      link="support_Link" />
-    <child
-      link="cam_Link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-
-  <!-- Robot Tip -->
-  <link name="tip_link"/>
-  <joint name="support_tip_joint" type="fixed">
-    <parent link="support_Link"/>
-    <child link="tip_link"/>
-    <origin xyz="0.025 0.004 0.001" rpy="0 0 0"/> 
-  </joint>
-
-  <xacro:macro name="control" params="joint">
-    <transmission name="${joint}_transmission">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${joint}">
-        <hardwareInterface>position</hardwareInterface>
-      </joint>
-      <actuator name="${joint}_motor">
-        <hardwareInterface>position</hardwareInterface>
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-  </xacro:macro>
-
-<!-- Usage -->
-  <xacro:control joint="base_waist_joint"/>
-  <xacro:control joint="waist_arm_joint"/>
-  <xacro:control joint="arm_end_joint"/>
-  <xacro:control joint="end_support_joint"/>
-  <xacro:control joint="support_cam_joint"/>
-
-  <gazebo>
-    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-      <robotNamespace>/robotic_arm</robotNamespace>
-      <parameters>$(find moveit_robotic_arm)/config/ros2_controllers.yaml</parameters>
-    </plugin>
-  </gazebo>
-
-  <ros2_control name="controller_manager" type="system">
-    <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-    </hardware>
-
-    <joint>
-      <name>base_waist_joint</name>
-      <command_interface>position</command_interface>
-      <state_interface>position</state_interface>
-      <state_interface>velocity</state_interface>
-    </joint>
-    <joint>
-      <name>waist_arm_joint</name>
-      <command_interface>position</command_interface>
-      <state_interface>position</state_interface>
-      <state_interface>velocity</state_interface>
-    </joint>
-    <joint>
-      <name>arm_end_joint</name>
-      <command_interface>position</command_interface>
-      <state_interface>position</state_interface>
-      <state_interface>velocity</state_interface>
-    </joint>
-    <joint>
-      <name>end_support_joint</name>
-      <command_interface>position</command_interface>
-      <state_interface>position</state_interface>
-      <state_interface>velocity</state_interface>
-    </joint>
-    <joint>
-      <name>support_cam_joint</name>
-      <command_interface>position</command_interface>
-      <state_interface>position</state_interface>
-      <state_interface>velocity</state_interface>
-    </joint>  
-  </ros2_control>
 </robot>
