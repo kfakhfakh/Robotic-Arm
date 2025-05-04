@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot name="robotic_arm" xmlns:xacro="http:///www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find robotic_arm)/urdf/Robot_Arm_control.xacro" />
+  <xacro:include filename="$(find robotic_arm)/urdf/Robot_Arm_gazebo.xacro" />
+  
   <link
     name="base_link">
     <inertial>
@@ -22,7 +25,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/base_link.STL" />
+          filename="package://robotic_arm/meshes/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -37,7 +40,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/base_link.STL" />
+          filename="package://robotic_arm/meshes/base_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -63,7 +66,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/waist_Link.STL" />
+          filename="package://robotic_arm/meshes/waist_Link.STL" />
       </geometry>
       <material
         name="">
@@ -77,7 +80,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/waist_Link.STL" />
+          filename="package://robotic_arm/meshes/waist_Link.STL" />
       </geometry>
     </collision>
   </link>
@@ -121,7 +124,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/arm_Link.STL" />
+          filename="package://robotic_arm/meshes/arm_Link.STL" />
       </geometry>
       <material
         name="">
@@ -135,7 +138,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/arm_Link.STL" />
+          filename="package://robotic_arm/meshes/arm_Link.STL" />
       </geometry>
     </collision>
   </link>
@@ -179,7 +182,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/end_Link.STL" />
+          filename="package://robotic_arm/meshes/end_Link.STL" />
       </geometry>
       <material
         name="">
@@ -193,7 +196,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/end_Link.STL" />
+          filename="package://robotic_arm/meshes/end_Link.STL" />
       </geometry>
     </collision>
   </link>
@@ -237,7 +240,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/support_Link.STL" />
+          filename="package://robotic_arm/meshes/support_Link.STL" />
       </geometry>
       <material
         name="">
@@ -251,7 +254,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/support_Link.STL" />
+          filename="package://robotic_arm/meshes/support_Link.STL" />
       </geometry>
     </collision>
   </link>
@@ -268,4 +271,88 @@
     <axis
       xyz="0 0 0" />
   </joint>
+
+
+  <link
+    name="cam_Link">
+    <inertial>
+      <origin
+        xyz="0.0215 0.0215 0.0215"
+        rpy="0 0 0" />
+      <mass
+        value="0.079507" />
+      <inertia
+        ixx="2.4501E-05"
+        ixy="-1.8211E-21"
+        ixz="-5.7909E-22"
+        iyy="2.4501E-05"
+        iyz="-2.7946E-23"
+        izz="2.4501E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotic_arm/meshes/cam_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robotic_arm/meshes/cam_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="support_cam_joint"
+    type="fixed">
+    <origin
+      xyz="-0.0028878 0.074628 0.023"
+      rpy="-1.5708 0 -1.5708" />
+    <parent
+      link="support_Link" />
+    <child
+      link="cam_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- Robot Tip -->
+  <link name="tip_link"/>
+  <joint name="support_tip_joint" type="fixed">
+    <parent link="support_Link"/>
+    <child link="tip_link"/>
+    <origin xyz="0.025 0.004 0.001" rpy="0 0 0"/> 
+  </joint>
+
+  <xacro:macro name="control" params="joint">
+    <transmission name="${joint}_transmission">
+      <plugin>transmission_interface/SimpleTransmission</plugin >
+      <joint name="${joint}_joint"> 
+        <hardwareInterface>position</hardwareInterface>
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </joint>
+      <actuator name="${joint}_motor">
+        <hardwareInterface>position</hardwareInterface> 
+        <mechanicalReduction>1.0</mechanicalReduction>  
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+<!-- Usage -->
+  <xacro:control joint="base_waist"/>
+  <xacro:control joint="waist_arm"/>
+  <xacro:control joint="arm_end"/>
+  <xacro:control joint="end_support"/>
+  <xacro:control joint="support_cam"/>
 </robot>

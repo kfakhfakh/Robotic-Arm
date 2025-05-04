@@ -7,6 +7,15 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake REQUIRED)
+find_package(xacro REQUIRED)
+find_package(controller_manager REQUIRED)
+find_package(joint_state_broadcaster REQUIRED)
+find_package(joint_trajectory_controller REQUIRED)
+find_package(ros2_control REQUIRED)
+find_package(gazebo_ros2_control REQUIRED)
+find_package(moveit_ros_planning REQUIRED)
+find_package(moveit_ros_control_interface REQUIRED)
 install(
   DIRECTORY 
   urdf 
