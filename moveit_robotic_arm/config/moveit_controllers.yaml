@@ -7,6 +7,7 @@ moveit_simple_controller_manager:
     - arm_group_controller
 
   arm_group_controller:
+    action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
     joints:
       - base_waist_joint

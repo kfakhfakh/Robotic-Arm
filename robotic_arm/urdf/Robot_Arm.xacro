@@ -277,7 +277,7 @@
     name="cam_Link">
     <inertial>
       <origin
-        xyz="0.0215 0.0215 0.0215"
+        xyz="-0.04 -0.022 -0.021"
         rpy="0 0 0" />
       <mass
         value="0.079507" />
@@ -291,7 +291,7 @@
     </inertial>
     <visual>
       <origin
-        xyz="0 0 0"
+        xyz="-0.04 -0.022 -0.021"
         rpy="0 0 0" />
       <geometry>
         <mesh
@@ -317,8 +317,8 @@
     name="support_cam_joint"
     type="fixed">
     <origin
-      xyz="-0.0028878 0.074628 0.023"
-      rpy="-1.5708 0 -1.5708" />
+      xyz="0.04 0.0525 0.0005"
+      rpy="-1.570 0 0" />
     <parent
       link="support_Link" />
     <child
@@ -353,6 +353,28 @@
   <xacro:control joint="base_waist"/>
   <xacro:control joint="waist_arm"/>
   <xacro:control joint="arm_end"/>
-  <xacro:control joint="end_support"/>
-  <xacro:control joint="support_cam"/>
+
+  <link name="cam_Link_optical">
+    </link>
+
+    <joint name="cam_Link_joint" type="fixed">
+        <!-- these values have to be these values otherwise the gazebo camera
+            image won't be aligned properly with the frame it is supposedly
+            originating from -->
+        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+        <parent link="cam_Link"/>
+        <child link="cam_Link_optical"/>
+    </joint>
+
+    <gazebo reference="cam_Link">
+        <material>Gazebo/Red</material>
+        <sensor name="camera_sensor" type="camera">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>true</visualize>
+            <update_rate>10.0</update_rate>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <frame_name>cam_link_optical</frame_name>
+            </plugin>
+        </sensor>
+    </gazebo>
 </robot>
