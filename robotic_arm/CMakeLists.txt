@@ -9,13 +9,18 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(xacro REQUIRED)
-find_package(controller_manager REQUIRED)
-find_package(joint_state_broadcaster REQUIRED)
-find_package(joint_trajectory_controller REQUIRED)
-find_package(ros2_control REQUIRED)
-find_package(gazebo_ros2_control REQUIRED)
-find_package(moveit_ros_planning REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(moveit_ros_planning_interface REQUIRED)
 find_package(moveit_ros_control_interface REQUIRED)
+add_executable(position src/test.cpp)
+ament_target_dependencies(position rclcpp moveit_ros_planning_interface )
+
+install( 
+  TARGETS
+  position
+  DESTINATION lib/${PROJECT_NAME}/
+)
+
 install(
   DIRECTORY 
   urdf 

@@ -10,7 +10,7 @@
         xyz="-7.5348E-09 -0.00013761 0.017995"
         rpy="0 0 0" />
       <mass
-        value="0.10728" />
+        value="0.83" />
       <inertia
         ixx="0.00014427"
         ixy="6.2688E-11"
@@ -376,5 +376,8 @@
                 <frame_name>cam_link_optical</frame_name>
             </plugin>
         </sensor>
+    </gazebo>
+    <gazebo reference="base_Link">
+        <material>Gazebo/Red</material>
     </gazebo>
 </robot>
