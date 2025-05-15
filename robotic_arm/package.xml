@@ -25,6 +25,8 @@
   <exec_depend>moveit_ros_planning_interface</exec_depend>
   <exec_depend>moveit_ros_control_interface</exec_depend>
   <exec_depend>gazebo_ros2_control</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>rclpy</exec_depend>
   <exec_depend>ros2_control</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
