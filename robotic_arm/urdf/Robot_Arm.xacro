@@ -334,6 +334,13 @@
     <child link="tip_link"/>
     <origin xyz="0.025 0.004 0.001" rpy="0 0 0"/> 
   </joint>
+  <!-- fix the robot to the world -->
+  <link name="world"/>
+  <joint name="world_fixed_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
 
   <xacro:macro name="control" params="joint">
     <transmission name="${joint}_transmission">
@@ -349,18 +356,13 @@
     </transmission>
   </xacro:macro>
 
-<!-- Usage -->
   <xacro:control joint="base_waist"/>
   <xacro:control joint="waist_arm"/>
   <xacro:control joint="arm_end"/>
 
   <link name="cam_Link_optical">
     </link>
-
     <joint name="cam_Link_joint" type="fixed">
-        <!-- these values have to be these values otherwise the gazebo camera
-            image won't be aligned properly with the frame it is supposedly
-            originating from -->
         <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
         <parent link="cam_Link"/>
         <child link="cam_Link_optical"/>
@@ -376,8 +378,5 @@
                 <frame_name>cam_link_optical</frame_name>
             </plugin>
         </sensor>
-    </gazebo>
-    <gazebo reference="base_Link">
-        <material>Gazebo/Red</material>
     </gazebo>
 </robot>
