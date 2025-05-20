@@ -21,7 +21,7 @@ arm_group_controller:
     open_loop_control: true
     allow_integration_in_goal_trajectories: true
     constraints:
-      goal_time: 0.5
+      goal_time: 0.1
     gains:  
       base_waist_joint: {p: 100.0, i: 0.01, d: 10.0}
       waist_arm_joint: {p: 100.0, i: 0.01, d: 10.0}

@@ -27,7 +27,10 @@ def generate_launch_description():
         package="moveit_ros_move_group",
         executable="move_group",
         output="screen",
-        parameters=[moveit_config.to_dict(), {"use_sim_time": is_sim}, {"publish_robot_description_semantic": True}],
+        parameters=[moveit_config.to_dict(), {"use_sim_time": is_sim},
+        {"publish_robot_description_semantic": True},
+        {"publish_robot_state": True},
+        {"publish_planning_scene": True}],
         arguments=["--ros-args", "--log-level", "info"]
     )
 

@@ -11,10 +11,11 @@ find_package(rclpy REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(xacro REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 find_package(moveit_ros_control_interface REQUIRED)
 add_executable(position src/test.cpp)
-ament_target_dependencies(position rclcpp moveit_ros_planning_interface )
+ament_target_dependencies(position rclcpp moveit_ros_planning_interface geometry_msgs )
 
 
 install( 
