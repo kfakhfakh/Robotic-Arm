@@ -374,15 +374,18 @@
             <pose>0 0 0 0 0 0</pose>
             <visualize>true</visualize>
             <update_rate>10.0</update_rate>
-            <image>
-              <width>1280</width>       
-              <height>720</height>      
-              <format>R8G8B8</format>   
-            </image>
+            <camera name="cam">
+              <horizontal_fov>1.3962634</horizontal_fov>
+              <image>
+                <width>1280</width>
+                <height>1280</height>
+                <format>R8G8B8</format>
+              </image>
+            </camera>
             <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
                 <frame_name>cam_link_optical</frame_name>
                 <image_width>1280</image_width>
-                <image_height>720</image_height>
+                <image_height>1280</image_height>
                 <update_rate>10.0</update_rate>
             </plugin>
         </sensor>

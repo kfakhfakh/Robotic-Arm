@@ -52,7 +52,8 @@ class GazeboCamNode(Node):
                 cv2.circle(frame, bbox_center, 5, (0, 0, 255), -1)
                 cv2.circle(frame, frame_center, 5, (255, 0, 0), -1)
                 cv2.line(frame, frame_center, bbox_center, (255, 0, 255), 2)
-            cv2.imshow('YOLO', frame)
+            resized_frame = cv2.resize(frame, (640, 480))
+            cv2.imshow('YOLO', resized_frame)
             cv2.waitKey(1)
         except Exception as e:
             self.get_logger().error(f'Error converting image: {e}')

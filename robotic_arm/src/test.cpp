@@ -23,6 +23,9 @@ void move_robot(const std::shared_ptr<rclcpp::Node> node)
 
     arm_move_group.setPoseTarget(target_pose, "tip_link");
 
+    //to run onlu XYZ coordinates
+    //arm_move_group.setPositionTarget(0.130, 0.0, 0.2, "tip_link");
+
     moveit::planning_interface::MoveGroupInterface::Plan arm_plan;
     bool arm_plan_success = arm_move_group.plan(arm_plan) == moveit::core::MoveItErrorCode::SUCCESS;
 
