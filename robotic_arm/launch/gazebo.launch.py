@@ -1,10 +1,10 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
-
+ 
 def generate_launch_description():
     # Paths
     urdf_path = PathJoinSubstitution([
@@ -19,16 +19,15 @@ def generate_launch_description():
         "rviz_config.rviz"
     ])
 
-    # Launch Ignition Gazebo with an empty world
+    # Launch Gazebo Classic with a default world
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
-                FindPackageShare("ros_gz_sim"),
+                FindPackageShare("gazebo_ros"),
                 "launch",
-                "gz_sim.launch.py"
+                "gazebo.launch.py"  # Default Gazebo launch file
             ])
-        ]),
-        launch_arguments={"gz_args": "-r empty.sdf"}.items()
+        ])
     )
 
     return LaunchDescription([
@@ -41,16 +40,22 @@ def generate_launch_description():
             }]
         ),
 
-        # Spawn robot in Ignition using /robot_description topic
-        Node(
-            package="ros_gz_sim",
-            executable="create",
-            arguments=[
-                "-name", "robotic_arm",
-                "-topic", "robot_description",
-                "-x", "0", "-y", "0", "-z", "0.5"
+        # Delay spawning robot to ensure Gazebo is ready
+        TimerAction(
+            period=5.0,  # Wait 5 seconds before spawning
+            actions=[
+                Node(
+                    package="gazebo_ros",
+                    executable="spawn_entity.py",
+                    arguments=[
+                        "-file", Command(["xacro ", urdf_path]),  # Convert XACRO to XML
+                        "-entity", "robotic_arm",  # Specify the entity name
+                        "-x", "0", "-y", "0", "-z", "0.5"  # Position
+                    ]
+                )
             ]
         ),
+
 
         # GUI for manually setting joint states (useful for testing)
         Node(
@@ -66,6 +71,6 @@ def generate_launch_description():
             arguments=["-d", rviz_config_path]
         ),
 
-        # Launch Ignition Gazebo
+        # Launch Gazebo Classic
         gz_sim
     ])

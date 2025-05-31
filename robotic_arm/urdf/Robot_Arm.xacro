@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot name="robotic_arm" xmlns:xacro="http:///www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find robotic_arm)/urdf/Robot_Arm_control.xacro" />
+  <xacro:include filename="$(find robotic_arm)/urdf/Robot_Arm_gazebo.xacro" />
+  
   <link
     name="base_link">
     <inertial>
@@ -7,7 +10,7 @@
         xyz="-7.5348E-09 -0.00013761 0.017995"
         rpy="0 0 0" />
       <mass
-        value="0.10728" />
+        value="0.83" />
       <inertia
         ixx="0.00014427"
         ixy="6.2688E-11"
@@ -268,4 +271,118 @@
     <axis
       xyz="0 0 0" />
   </joint>
+
+
+  <link
+    name="cam_Link">
+    <inertial>
+      <origin
+        xyz="-0.04 -0.022 -0.021"
+        rpy="0 0 0" />
+      <mass
+        value="0.079507" />
+      <inertia
+        ixx="2.4501E-05"
+        ixy="-1.8211E-21"
+        ixz="-5.7909E-22"
+        iyy="2.4501E-05"
+        iyz="-2.7946E-23"
+        izz="2.4501E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="-0.04 -0.022 -0.021"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/cam_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file:///home/khaled/ros2_ws/src/robotic_arm/meshes/cam_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="support_cam_joint"
+    type="fixed">
+    <origin
+      xyz="0.04 0.0525 0.0005"
+      rpy="-1.570 0 0" />
+    <parent
+      link="support_Link" />
+    <child
+      link="cam_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- Robot Tip -->
+  <link name="tip_link"/>
+  <joint name="support_tip_joint" type="fixed">
+    <parent link="support_Link"/>
+    <child link="tip_link"/>
+    <origin xyz="0.025 0.004 0.001" rpy="0 0 0"/> 
+  </joint>
+  <!-- fix the robot to the world -->
+ 
+
+  <xacro:macro name="control" params="joint">
+    <transmission name="${joint}_transmission">
+      <plugin>transmission_interface/SimpleTransmission</plugin>
+      <joint name="${joint}_joint"> 
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>1.0</mechanicalReduction>
+      </joint>
+      <actuator name="${joint}_motor">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface> 
+        <mechanicalReduction>1.0</mechanicalReduction>  
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:control joint="base_waist"/>
+  <xacro:control joint="waist_arm"/>
+  <xacro:control joint="arm_end"/>
+
+  <link name="cam_Link_optical">
+    </link>
+    <joint name="cam_Link_joint" type="fixed">
+        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+        <parent link="cam_Link"/>
+        <child link="cam_Link_optical"/>
+    </joint>
+
+    <gazebo reference="cam_Link">
+        <material>Gazebo/Red</material>
+        <sensor name="camera_sensor" type="camera">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>true</visualize>
+            <update_rate>10.0</update_rate>
+            <camera name="cam">
+              <horizontal_fov>1.3962634</horizontal_fov>
+              <image>
+                <width>1280</width>
+                <height>1280</height>
+                <format>R8G8B8</format>
+              </image>
+            </camera>
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <frame_name>cam_link_optical</frame_name>
+                <image_width>1280</image_width>
+                <image_height>1280</image_height>
+                <update_rate>10.0</update_rate>
+            </plugin>
+        </sensor>
+    </gazebo>
 </robot>

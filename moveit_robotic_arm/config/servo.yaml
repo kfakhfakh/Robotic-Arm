@@ -1,0 +1,50 @@
+/**:
+  ros__parameters:
+    moveit_servo:
+      # Basic configuration
+      publish_period: 0.01                # Seconds (100Hz)
+      command_in_type: "unitless"         # "unitless" or "speed_units"
+      command_out_type: "std_msgs/Float64MultiArray"  # For ros2_control
+
+      publish_joint_positions: true
+      publish_joint_velocities: true
+      publish_joint_accelerations: false
+
+      # Velocity scaling (adjust for your robot)
+      scale:
+        linear: 0.1                       # Max linear velocity (m/s)
+        rotational: 0.1                   # Max rotational velocity (rad/s)
+        joint: 0.1                        # Max joint velocity (rad/s)
+      move_group_name: arm_group  # Often 'manipulator' or 'arm'
+
+      # Collision checking
+      collision_check: true
+      collision_check_rate: 20.0          # Hz
+      self_collision_proximity_threshold: 0.01  # Meters
+      scene_collision_proximity_threshold: 0.02  # Meters
+
+      # Topics (don't change unless necessary)
+      cartesian_command_in_topic: "/servo_server/delta_twist_cmds"
+      joint_command_in_topic: "/servo_server/delta_joint_cmds"
+      
+      # Controller Output
+      command_out_topic: "/arm_group_controller/commands"
+      # System Integration
+      
+      status_topic: "/servo_server/status"
+      joint_topic: "/joint_states"
+      collision_velocity_scale_topic: "/servo_server/collision_velocity_scale"
+
+      # Singularity handling
+      lower_singularity_threshold: 10.0    # Degrees
+      hard_stop_singularity_threshold: 30.0 # Degrees
+      leaving_singularity_threshold_multiplier: 2.0
+
+      # MoveIt configuration
+      move_group_name: arm_group           # Must match your planning group
+      planning_frame: base_link            # Your robot's base frame
+
+      check_collisions: true  # Check collisions?
+      collision_check_rate: 10.0  
+      self_collision_proximity_threshold: 0.01 # Start decelerating when a self-collision is this far [m]
+      scene_collision_proximity_threshold: 0.02 # Start decelerating when a scene collision is this far [m]
