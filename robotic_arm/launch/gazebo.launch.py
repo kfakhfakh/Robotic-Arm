@@ -1,76 +1,119 @@
+# Copyright 2021 Open Source Robotics Foundation, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from launch import LaunchDescription
-from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription, TimerAction
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import RegisterEventHandler
+from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command, PathJoinSubstitution
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+
+from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
- 
+
+
 def generate_launch_description():
-    # Paths
-    urdf_path = PathJoinSubstitution([
-        FindPackageShare("robotic_arm"),
-        "urdf",
-        "Robot_Arm.xacro"
-    ])
+    # Launch Arguments
+    use_sim_time = LaunchConfiguration('use_sim_time', default=True)
+    gz_args = LaunchConfiguration('gz_args', default='')
 
-    rviz_config_path = PathJoinSubstitution([
-        FindPackageShare("robotic_arm"),
-        "rviz",
-        "rviz_config.rviz"
-    ])
+    # Get URDF via xacro
+    robot_description_content = Command(
+        [
+            PathJoinSubstitution([FindExecutable(name='xacro')]),
+            ' ',
+            PathJoinSubstitution(
+                [FindPackageShare('robotic_arm'),
+                 'urdf', 'Robot_Arm.xacro']
+            ),
+        ]
+    )
+    robot_description = {'robot_description': robot_description_content}
+    robot_controllers = PathJoinSubstitution(
+        [
+            FindPackageShare('moveit_robotic_arm'),
+            'config',
+            'ros2_controllers.yaml',
+        ]
+    )
 
-    # Launch Gazebo Classic with a default world
-    gz_sim = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare("gazebo_ros"),
-                "launch",
-                "gazebo.launch.py"  # Default Gazebo launch file
-            ])
-        ])
+    node_robot_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        parameters=[robot_description]
+    )
+
+    gz_spawn_entity = Node(
+        package='ros_gz_sim',
+        executable='create',
+        output='screen',
+        arguments=['-topic', 'robot_description',
+                   '-name', 'cart', '-allow_renaming', 'true'],
+    )
+
+    joint_state_broadcaster_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['joint_state_broadcaster',
+                   ],
+    )
+    joint_trajectory_controller_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=[
+            'arm_group_controller',
+            '--param-file',
+            robot_controllers,
+            ],
+    )
+
+    # Bridge
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+                   "/joint_states@sensor_msgs/msg/JointState[ignition.msgs.Model",],
+        output='screen'
     )
 
     return LaunchDescription([
-        # Publish robot description to /robot_description
-        Node(
-            package="robot_state_publisher",
-            executable="robot_state_publisher",
-            parameters=[{
-                "robot_description": Command(["xacro ", urdf_path])
-            }]
+        # Launch gazebo environment
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                [PathJoinSubstitution([FindPackageShare('ros_gz_sim'),
+                                       'launch',
+                                       'gz_sim.launch.py'])]),
+            launch_arguments=[('gz_args', [gz_args, ' -r -v 1 empty.sdf'])]),
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=gz_spawn_entity,
+                on_exit=[joint_state_broadcaster_spawner],
+            )
         ),
-
-        # Delay spawning robot to ensure Gazebo is ready
-        TimerAction(
-            period=5.0,  # Wait 5 seconds before spawning
-            actions=[
-                Node(
-                    package="gazebo_ros",
-                    executable="spawn_entity.py",
-                    arguments=[
-                        "-file", Command(["xacro ", urdf_path]),  # Convert XACRO to XML
-                        "-entity", "robotic_arm",  # Specify the entity name
-                        "-x", "0", "-y", "0", "-z", "0.5"  # Position
-                    ]
-                )
-            ]
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=joint_state_broadcaster_spawner,
+                on_exit=[joint_trajectory_controller_spawner],
+            )
         ),
-
-
-        # GUI for manually setting joint states (useful for testing)
-        Node(
-            package="joint_state_publisher_gui",
-            executable="joint_state_publisher_gui"
-        ),
-
-        # Launch RViz2 with predefined config
-        Node(
-            package="rviz2",
-            executable="rviz2",
-            output="screen",
-            arguments=["-d", rviz_config_path]
-        ),
-
-        # Launch Gazebo Classic
-        gz_sim
+        bridge,
+        node_robot_state_publisher,
+        gz_spawn_entity,
+        # Launch Arguments
+        DeclareLaunchArgument(
+            'use_sim_time',
+            default_value=use_sim_time,
+            description='If true, use simulated clock'),
     ])

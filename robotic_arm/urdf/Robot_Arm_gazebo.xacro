@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot name="robotic_arm" xmlns:xacro="http:///www.ros.org/wiki/xacro">
-  <gazebo>
-    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-      <robot_param>robot_description</robot_param>
-      <robot_param_node>robot_state_publisher</robot_param_node>
-      <parameters>$(find moveit_robotic_arm)/config/ros2_controllers.yaml</parameters>
-    </plugin>
-  </gazebo>
+  <xacro:if value="${use_ignition}">
+    <plugin name="ign_ros2_control::IgnitionROS2ControlPlugin" filename="ign_ros2_control-system">
+        <robot_param>robot_description</robot_param>
+        <robot_param_node>robot_state_publisher</robot_param_node>
+        <parameters>$(find moveit_robotic_arm)/config/ros2_controllers.yaml</parameters>
+      </plugin>
+  </xacro:if>
+  <xacro:unless value="${use_ignition}">
+    <gazebo>
+      <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+        <robot_param>robot_description</robot_param>
+        <robot_param_node>robot_state_publisher</robot_param_node>
+        <parameters>$(find moveit_robotic_arm)/config/ros2_controllers.yaml</parameters>
+      </plugin>
+    </gazebo>
+  </xacro:unless>
 </robot>
