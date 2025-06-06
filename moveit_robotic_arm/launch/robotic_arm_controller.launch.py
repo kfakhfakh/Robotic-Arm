@@ -38,7 +38,7 @@ def generate_launch_description():
                     "/controller_manager",]
         
     )
-    arm_vel_spawner=Node(
+    arm_vel_controller=Node(
         package="controller_manager",
         executable="spawner",
         arguments=["arm_vel_controller",
@@ -51,7 +51,6 @@ def generate_launch_description():
     return LaunchDescription([
         robot_state_publisher,
         joint_state_broadcaster_spawner,
-        #arm_vel_spawner,
         arm_controller_spawner,
-        
+        arm_vel_controller,
     ])

@@ -28,9 +28,7 @@ arm_group_controller:
       base_waist_joint: {p: 100.0, i: 0.01, d: 10.0}
       waist_arm_joint: {p: 100.0, i: 0.01, d: 10.0}
       arm_end_joint: {p: 100.0, i: 0.01, d: 10.0}
-
-
-
+      
 arm_vel_controller:
   ros__parameters:
     joints:
@@ -50,5 +48,3 @@ arm_vel_controller:
       base_waist_joint: {p: 100.0, i: 0.01, d: 10.0}
       waist_arm_joint: {p: 100.0, i: 0.01, d: 10.0}
       arm_end_joint: {p: 100.0, i: 0.01, d: 10.0}
-      end_support_joint: {p: 100.0, i: 0.01, d: 10.0}
-      support_cam_joint: {p: 100.0, i: 0.01, d: 10.0}
