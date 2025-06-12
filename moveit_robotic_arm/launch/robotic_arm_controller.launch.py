@@ -52,5 +52,5 @@ def generate_launch_description():
         robot_state_publisher,
         joint_state_broadcaster_spawner,
         arm_controller_spawner,
-        arm_vel_controller,
+        #arm_vel_controller,
     ])
