@@ -1,0 +1,37 @@
+servo_server:
+  ros__parameters:
+    # Core Settings
+    publish_period: 0.01  # 100Hz
+    command_in_type: "unitless"  # unitless or speed_units
+    
+    # ROS 2 Control Integration
+    command_out_type: "std_msgs/Float64MultiArray"
+    command_out_topic: "/joint_group_velocity_controller/commands"
+    
+    # MoveIt Group Configuration
+    move_group_name: "arm_group"  # Must match your SRDF group
+    planning_frame: "base_link"  # Typically your robot's base frame
+    
+    # Velocity Scaling
+    scale:
+      linear: 0.1
+      rotational: 0.1
+      joint: 0.1
+    
+    # Collision Checking
+    collision_check: true
+    collision_check_rate: 20.0
+    self_collision_proximity_threshold: 0.01
+    scene_collision_proximity_threshold: 0.02
+    
+    # Topics
+    joint_topic: "/joint_states"
+    status_topic: "/servo_server/status"
+    
+    # Singularity Handling
+    lower_singularity_threshold: 10.0
+    hard_stop_singularity_threshold: 30.0
+    leaving_singularity_threshold_multiplier: 2.0
+    
+    # Optional: Gazebo-specific (only if actually using Gazebo)
+    use_gazebo: false  # Set true ONLY if using Gazebo with proper setup

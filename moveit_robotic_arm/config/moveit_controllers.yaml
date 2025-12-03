@@ -1,0 +1,21 @@
+
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - arm_group_controller
+    - arm_vel_controller
+
+  arm_group_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    joints:
+      - base_waist_joint
+      - waist_arm_joint
+      - arm_end_joint
+  arm_vel_controller:
+    type: velocity_controllers/JointGroupVelocityController
+    joints:
+      - base_waist_joint
+      - waist_arm_joint
+      - arm_end_joint
