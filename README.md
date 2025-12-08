@@ -89,7 +89,10 @@ source install/setup.bash
 ```bash
 ros2 launch robotic_arm display.launch.py
 ```
-<img width="551" height="533" alt="Screenshot 2025-12-08 192456" src="https://github.com/user-attachments/assets/df7eddc5-7b63-4d8f-a985-0f8a327c9c8a" />
+<div align="center">
+  <img width="551" height="533" alt="Screenshot 2025-12-08 192456" src="https://github.com/user-attachments/assets/df7eddc5-7b63-4d8f-a985-0f8a327c9c8a" />
+</div>
+
 
 This launches the robot state publisher and allows manual joint control via the joint state publisher GUI.
 
@@ -99,7 +102,10 @@ This launches the robot state publisher and allows manual joint control via the 
 ros2 launch robotic_arm moveit_gazebo.launch.py
 ```
 
-<img width="573" height="533" alt="Screenshot 2025-12-08 192512" src="https://github.com/user-attachments/assets/8ed3ddff-d679-4c0f-9e7b-3c87d1840fde" />
+<div align="center">
+  <img width="573" height="533" alt="Screenshot 2025-12-08 192512" src="https://github.com/user-attachments/assets/8ed3ddff-d679-4c0f-9e7b-3c87d1840fde" />
+</div>
+
 
 Includes:
 - Gazebo physics simulation
@@ -107,7 +113,10 @@ Includes:
 - Motion planning and execution
 - Joint state publishing
   
-<img width="970" height="486" alt="Screenshot 2025-12-08 192504" src="https://github.com/user-attachments/assets/53d7917f-0535-4787-8b47-9ce58bfa4dbf" />
+<div align="center">
+  <img width="970" height="486" alt="Screenshot 2025-12-08 192504" src="https://github.com/user-attachments/assets/53d7917f-0535-4787-8b47-9ce58bfa4dbf" />
+</div>
+
 
 ### 3. Standard Gazebo Launch
 
@@ -129,7 +138,10 @@ This starts the YOLO-based object tracking system that:
 - Publishes joint trajectory commands
 - Visualizes detection results with OpenCV
   
-<img width="769" height="388" alt="Screenshot 2025-12-08 192520" src="https://github.com/user-attachments/assets/fb53bd97-1dd2-4078-bf51-89f775ebedf0" />
+<div align="center">
+  <img width="769" height="388" alt="Screenshot 2025-12-08 192520" src="https://github.com/user-attachments/assets/fb53bd97-1dd2-4078-bf51-89f775ebedf0" />
+</div>
+
 
 
 ### 5. Test Motion Planning
@@ -157,7 +169,10 @@ The robotic arm’s object tracking is powered by **visual servoing** combined w
 
 ### PID Controller Diagram
 
-<img width="1020" height="329" alt="Screenshot 2025-12-08 192538" src="https://github.com/user-attachments/assets/a8c32985-292d-49db-a810-b3a3b64cdcf3" />
+<div align="center">
+  <img width="1020" height="329" alt="Screenshot 2025-12-08 192538" src="https://github.com/user-attachments/assets/a8c32985-292d-49db-a810-b3a3b64cdcf3" />
+</div>
+
 
 ### Example Gain Parameters (`camera_sim.py`)
 
@@ -169,7 +184,9 @@ Kd = 0.3
 
 ## Video demo
 
-![demo1-MadewithClipchamp-ezgif com-video-to-gif-converter (2)](https://github.com/user-attachments/assets/9a136317-f6f4-4d5d-b03c-2e53ccbeef1a)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/9a136317-f6f4-4d5d-b03c-2e53ccbeef1a" alt="demo1-MadewithClipchamp-ezgif com-video-to-gif-converter (2)" />
+</div>
 
 ## Configuration Files
 
